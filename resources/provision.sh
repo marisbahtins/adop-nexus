@@ -7,7 +7,16 @@
 set -e
 
 username=admin
-password=admin123
+
+if [ -f ${NEXUS_DATA}/local-password-updated ]; then
+  echo "[INFO] Using updated local password to update configuration."
+  password=${NEXUS_ADMIN_PASSWORD}
+else
+  echo "[INFO] Using default local password to update configuration."
+  echo "[INFO] Note: If your password already upated, but such file doesn't exists in your data folder. Create ${NEXUS_DATA}/local-password-updated file and re-create container."
+  password=admin123
+fi
+
 nexus_host=http://localhost:8081/$NEXUS_CONTEXT
 
 pretty_sleep() {
@@ -101,6 +110,7 @@ if [ -n "${NEXUS_ADMIN_PASSWORD}" ]
   then
   NEXUS_PASSWORD="{\"new_password\":\"$NEXUS_ADMIN_PASSWORD\"}"
   addAndRunScript updatePassword resources/conf/update_admin_password.groovy "\${NEXUS_PASSWORD}"
+  touch ${NEXUS_DATA}/local-password-updated
 fi
 
 
