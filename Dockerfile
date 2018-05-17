@@ -29,14 +29,7 @@ ENV LDAP_ENABLED=true \
 USER root
 
 # Install groovy
-RUN yum install -y zip unzip
-RUN yum install -y which
-RUN curl -s get.sdkman.io | bash
-RUN source "$HOME/.sdkman/bin/sdkman-init.sh"
-RUN yes | /bin/bash -l -c "sdk install groovy 2.4.15"
-
-ENV PATH="/root/.sdkman/candidates/groovy/2.4.15/bin:${PATH}"
-RUN export PATH
+RUN yum install -y zip unzip which
 
 COPY resources/nexus.sh /usr/local/bin/
 COPY resources/provision.sh /usr/local/bin/
